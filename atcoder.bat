@@ -36,6 +36,7 @@ if not exist %ROOT%config\template.txt (
 )
 
 if not exist test\%ID% (
+  echo;
   echo Download Test Cases...
   curl %URL% -O -#
   if not exist %ID% (
@@ -44,28 +45,20 @@ if not exist test\%ID% (
   )
   %ROOT%bin\parseTestcase.exe %ID%
   move %ID% test\%ID% > nul
-  echo Downloaded.
-  echo;
 )
 
 if not exist %ID%.cpp (
+  echo;
   echo No Source File.
   copy nul %ID%.cpp > nul
   type %ROOT%config\template.txt >> %ID%.cpp
   echo Created "%ID%.cpp"
-  echo;
 )
-
-echo Compile...
-@echo on
-g++ -g -std=gnu++14 -O0 %ID%.cpp -o bin\%ID%.exe
-@echo off
 echo;
-echo Test Start.
+echo Compile...
+g++ -g -std=gnu++14 -O0 %ID%.cpp -o bin\%ID%.exe
 echo;
 
 %ROOT%bin\test.exe test\%ID% bin\%ID%.exe
 
 del __tmp
-echo;
-echo Finish.
