@@ -56,16 +56,25 @@ if not exist %ID%.cpp (
 )
 echo;
 echo Compile...
-REM g++ -g -std=gnu++14 -O0 %ID%.cpp -o bin\%ID%.exe
+g++ -g -std=gnu++14 -O0 %ID%.cpp -o bin\%ID%.exe
 echo;
 
+if exist _tmp ( rd /s /q _tmp )
 mkdir _tmp
 %ROOT%bin\splitTestcase.exe test\%ID%
 
-REM for input in __tmp\**in
-REM   type input | bin\%ID%.exe >> __tmp\out{i}
+setlocal enabledelayedexpansion
+set pad=0000
+set /a i=1
+for %%f in (_tmp\in*) do (
+  set index=%pad%!i!
+  set name=_tmp\out!index:~-2,2!
+  type %%f | bin\%ID%.exe >> !name!
+  set /a i+=1
+)
+endlocal
 
 REM for output, expect in __tmp\in**, __tmp\out**
 REM   %ROOT%\bin\test.exe output expect
 
-REM del __tmp
+REM rd /s /q _tmp
