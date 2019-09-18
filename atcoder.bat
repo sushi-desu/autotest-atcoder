@@ -74,11 +74,12 @@ for %%f in (_tmp\in*) do (
 )
 
 for /l %%j in (1, 1, !i!) do (
+  echo;
   set index=%pad%%%j
   set output=_tmp\out!index:~-2,2!
   set expect=_tmp\exp!index:~-2,2!
-  fc !output! !expect!
+  %ROOT%bin\test.exe !output! !expect!
 )
 endlocal
 
-rd /s /q _tmp
+if exist _tmp ( rd /s /q _tmp )
