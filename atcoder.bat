@@ -65,16 +65,20 @@ mkdir _tmp
 
 setlocal enabledelayedexpansion
 set pad=0000
-set /a i=1
+set /a i=0
 for %%f in (_tmp\in*) do (
+  set /a i+=1
   set index=%pad%!i!
   set name=_tmp\out!index:~-2,2!
   type %%f | bin\%ID%.exe >> !name!
-  set /a i+=1
+)
+
+for /l %%j in (1, 1, !i!) do (
+  set index=%pad%%%j
+  set output=_tmp\out!index:~-2,2!
+  set expect=_tmp\exp!index:~-2,2!
+  fc !output! !expect!
 )
 endlocal
 
-REM for output, expect in __tmp\in**, __tmp\out**
-REM   %ROOT%\bin\test.exe output expect
-
-REM rd /s /q _tmp
+rd /s /q _tmp
