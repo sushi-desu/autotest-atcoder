@@ -59,6 +59,27 @@ echo Compile...
 g++ -g -std=gnu++14 -O0 %ID%.cpp -o bin\%ID%.exe
 echo;
 
-%ROOT%bin\test.exe test\%ID% bin\%ID%.exe
+if exist _tmp ( rd /s /q _tmp )
+mkdir _tmp
+%ROOT%bin\splitTestcase.exe test\%ID%
 
-del __tmp
+setlocal enabledelayedexpansion
+set pad=0000
+set /a i=0
+for %%f in (_tmp\in*) do (
+  set /a i+=1
+  set index=%pad%!i!
+  set name=_tmp\out!index:~-2,2!
+  type %%f | bin\%ID%.exe >> !name!
+)
+
+for /l %%j in (1, 1, !i!) do (
+  echo;
+  set index=%pad%%%j
+  set output=_tmp\out!index:~-2,2!
+  set expect=_tmp\exp!index:~-2,2!
+  %ROOT%bin\test.exe !output! !expect!
+)
+endlocal
+
+if exist _tmp ( rd /s /q _tmp )
