@@ -1,5 +1,6 @@
 @echo off
 set ROOT=%~dp0
+set BIN=%ROOT%bin\win
 
 if not "%2" == "" (
   echo;
@@ -43,7 +44,7 @@ if not exist test\%ID% (
     echo ERROR: invalid URL.
     goto :EOF
   )
-  %ROOT%bin\parseTestcase.exe %ID%
+  %BIN%\parseTestcase.exe %ID%
   move %ID% test\%ID% > nul
 )
 
@@ -61,7 +62,7 @@ echo;
 
 if exist _tmp ( rd /s /q _tmp )
 mkdir _tmp
-%ROOT%bin\splitTestcase.exe test\%ID%
+%BIN%\splitTestcase.exe test\%ID%
 
 setlocal enabledelayedexpansion
 set pad=0000
@@ -78,7 +79,7 @@ for /l %%j in (1, 1, !i!) do (
   set index=%pad%%%j
   set output=_tmp\out!index:~-2,2!
   set expect=_tmp\exp!index:~-2,2!
-  %ROOT%bin\test.exe !output! !expect!
+  %BIN%\test.exe !output! !expect!
 )
 endlocal
 

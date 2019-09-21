@@ -2,6 +2,7 @@
 ROOT=${0%/*}
 URL=${1%}
 ID=${URL##*/}
+BIN=${ROOT}/bin/mac
 
 if [ ${#} -eq 0 ]; then
   echo
@@ -38,7 +39,7 @@ if [ ! -e test/${ID} ]; then
     echo ERROR: invalid URL.
     exit
   fi
-  ${ROOT}/bin/parse_m.out ${ID}
+  ${BIN}/parseTestcase.out ${ID}
   mv ${ID} test/${ID}
 fi
 
@@ -54,4 +55,8 @@ echo Compile...
 g++ -g -std=gnu++14 -O0 ${ID}.cpp -o bin/${ID}.out
 echo
 
-bin/${ID}.out
+# bin/${ID}.out
+
+if [ -d ./_tmp ]; then rm -rf ./_tmp; fi
+mkdir _tmp
+${BIN}/splitTestcase.out test/${ID}
