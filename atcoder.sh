@@ -55,8 +55,13 @@ echo Compile...
 g++ -g -std=gnu++14 -O0 ${ID}.cpp -o bin/${ID}.out
 echo
 
-# bin/${ID}.out
-
 if [ -d ./_tmp ]; then rm -rf ./_tmp; fi
 mkdir _tmp
 ${BIN}/splitTestcase.out test/${ID}
+
+index=0
+for file in `\find _tmp -maxdepth 1 -name 'in*' | sort`; do
+  index=`expr $index + 1`
+  name=_tmp/out`printf %02d $index`
+  cat ${file} | bin/${ID}.out >> ${name}
+done
