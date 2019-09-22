@@ -65,3 +65,13 @@ for file in `\find _tmp -maxdepth 1 -name 'in*' | sort`; do
   name=_tmp/out`printf %02d $index`
   cat ${file} | bin/${ID}.out >> ${name}
 done
+
+for i in $(seq 1 $index); do
+  echo
+  idx=`printf %02d $i`
+  output=_tmp/out${idx}
+  expect=_tmp/exp${idx}
+  ${BIN}/test.out ${output} ${expect}
+done
+
+if [ -d ./_tmp ]; then rm -rf ./_tmp; fi
