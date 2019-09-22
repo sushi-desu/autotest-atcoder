@@ -59,6 +59,11 @@ if [ -d ./_tmp ]; then rm -rf ./_tmp; fi
 mkdir _tmp
 ${BIN}/splitTestcase.out test/${ID}
 
+# CRLF -> LF
+for file in `\find _tmp -depth 1`; do
+  nkf -Lu --overwrite ${file}
+done
+
 index=0
 for file in `\find _tmp -maxdepth 1 -name 'in*' | sort`; do
   index=`expr $index + 1`
