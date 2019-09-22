@@ -52,7 +52,7 @@ fi
 
 echo
 echo Compile...
-g++ -g -std=gnu++14 -O0 ${ID}.cpp -o bin/${ID}.out
+g++ -std=gnu++14 -O0 ${ID}.cpp -o bin/${ID}.out
 echo
 
 if [ -d ./_tmp ]; then rm -rf ./_tmp; fi
